@@ -2,7 +2,8 @@ version: '3'
 
 services:
   nginx:
-    build: ./nginx
+    # build: ./nginx
+    image: leandrosoares/conam-nginx
     ports:
       - "80:80"
       - "443:443"    
@@ -10,9 +11,10 @@ services:
       - app
 
   app:
-    image: conam-aws-app
-    build:
-      context: ./app
+    # image: conam-aws-app
+    # build:
+    #   context: ./app
+    image: leandrosoares/conam
     ports:
       - "9000:9000"
     volumes:
