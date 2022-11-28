@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+      - "443:443"    
+    links:
+      - app
+
+  app:
+    image: conam-aws-app
+    build:
+      context: ./app
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./app/src:/app
+      - './.config/php.ini:/etc/php/7.4/fpm/conf.d/99-overrides.ini'
+    links:
+      - redis
+      - postgres
+
+  redis:
+    image: 'redis:alpine'
+
+  postgres:
+    image: 'postgres:12-alpine'
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=conam
+    ports:
+      - '5432:5432'
