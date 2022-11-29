@@ -9,4 +9,4 @@ spec:
     - name: conam
       image: leandrosoares/conam
       ports:
-        - containerPort: 3000
+        - containerPort: 9000
