@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portal-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: portal
+  template:
+    metadata:
+      labels:
+        component: portal
+    spec:
+      containers:
+        - name: conam-portal
+          image: leandrosoares/conam-portal
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always

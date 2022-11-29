@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logger-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: logger
+  template:
+    metadata:
+      labels:
+        component: logger
+    spec:
+      containers:
+        - name: conam-logger
+          image: leandrosoares/conam-logger
+          imagePullPolicy: Always
