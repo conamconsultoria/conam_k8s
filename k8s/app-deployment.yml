@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: app-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      component: nginx
+      component: app
   template:
     metadata:
       labels:
-        component: nginx
+        component: app
     spec:
       containers:
-        - name: conam-nginx
-          image: leandrosoares/conam-nginx
+        - name: conam-app
+          image: leandrosoares/conam:v1
           ports:
             - containerPort: 80
           imagePullPolicy: Always
