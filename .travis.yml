@@ -1,9 +1,26 @@
 sudo: required
 services: 
   - docker
+env:
+  global:
+    - SHA=$(git rev-parse HEAD)
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
 before_install:
+  - openssl aes-256-cbc -K $encrypted_c13c9d2ed9ed_key -iv $encrypted_c13c9d2ed9ed_iv -in conam-370216-b6e0373a69b8.json.enc -out conam-370216-b6e0373a69b8.json -d
   - curl https://sdk.cloud.google.com | bash > /dev/null;
   - source $HOME/google-cloud-sdk/path.bash.inc
   - gcloud components update kubectl
-  - gcloud auth activate-service-account --key-file service_account.json
-  - openssl aes-256-cbc -K $encrypted_c13c9d2ed9ed_key -iv $encrypted_c13c9d2ed9ed_iv -in conam-370216-b6e0373a69b8.json.enc -out conam-370216-b6e0373a69b8.json -d
+  - gcloud auth activate-service-account --key-file service_account.json  
+  - gcloud config set project conam-370216
+  - gcloud config set compute/zone us-east4-a 
+  - gcloud container clusters get-credentials conam-cluster
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD"
+
+script:
+  - docker run hello-world
+
+deploy:
+  provider: script
+  script: bash ./deploy.sh
+  on:
+    branch: main

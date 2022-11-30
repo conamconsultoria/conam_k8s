@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: conam-app
-          image: leandrosoares/conam
+          image: leandroconam/conam-app
           ports:
             - containerPort: 80
           imagePullPolicy: Always
