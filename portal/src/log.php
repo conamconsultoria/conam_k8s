@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<h1>PORTAL</h1>
+<h1>LOGS</h1>
 <?php
 $db_host = getenv('DB_HOST');
 $db_port = getenv('DB_PORT');
@@ -33,17 +33,17 @@ $rk->addBrokers("{$broker_host}:{$broker_port}");
 $topic = $rk->newTopic("logger");
 $log_object = new stdClass;
 $log_object->data = date("Y-m-d H:i:s");
-$log_object->acao = "portal";
+$log_object->acao = "log-view";
 $topic->produce(RD_KAFKA_PARTITION_UA, 0, json_encode($log_object)); 
 
 ?>
     <ul>
         <?php
-        $sql = "SELECT * FROM teste_valores ORDER BY id;";
+        $sql = "SELECT data, log FROM log ORDER BY data DESC LIMIT 50;";
         $result = pg_query($conn, $sql);
         while($row = pg_fetch_row($result)) {
         ?>
-        <li><?=$row[1];?> Valor: <?=$row[2];?> Quantidade: <?=$row[3];?></li>
+        <li><?=$row[0];?> <br> Log: <?=$row[1];?></li>
         <?php
         }
         ?>
