@@ -14,7 +14,7 @@ before_install:
   - gcloud config set project conam-370216
   - gcloud config set compute/zone us-east4-a 
   - gcloud container clusters get-credentials conam-cluster
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - echo '$DOCKER_PASSWORD' | docker login -u "$DOCKER_USERNAME" --password-stdin
 
 script:
   - docker run hello-world
