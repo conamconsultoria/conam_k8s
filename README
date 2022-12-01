@@ -1,0 +1,75 @@
+# Create Cluster
+eksctl create cluster --name=conam-cluster \
+                      --region=us-east-1 \
+                      --zones=us-east-1a,us-east-1b \
+                      --without-nodegroup 
+
+# Get List of clusters
+eksctl get clusters
+
+
+# Create & Associate IAM OIDC Provider
+eksctl utils associate-iam-oidc-provider \
+    --region us-east-1 \
+    --cluster conam-cluster \
+    --approve
+
+
+# Criar key pair
+# https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/create-key-pairs.html
+aws ec2 create-key-pair \
+    --key-name conam-k8s-key-pair \
+    --key-type rsa \
+    --key-format pem \
+    --query "KeyMaterial" \
+    --output text > conam-k8s-key-pair.pem
+
+
+# create nodegroup
+eksctl create nodegroup --cluster=conam-cluster \
+    --region=us-east-1 \
+    --name=conam-cluster-ng-public1 \
+    --node-type=t3.small \
+    --nodes=2 \
+    --nodes-min=2 \
+    --nodes-max=3 \
+    --node-volume-size=10 \
+    --ssh-access \
+    --ssh-public-key=conam-k8s-key-pair \
+    --managed \
+    --asg-access \
+    --external-dns-access \
+    --full-ecr-access \
+    --appmesh-access \
+    --alb-ingress-access 
+
+
+# List EKS clusters
+eksctl get cluster
+
+# List NodeGroups in a cluster
+eksctl get nodegroup --cluster=conam-cluster
+
+# List Nodes in current kubernetes cluster
+kubectl get nodes -o wide
+
+# Our kubectl context should be automatically changed to new cluster
+kubectl config view --minify
+
+# Install ingress-nginx
+# https://kubernetes.github.io/ingress-nginx/deploy/#aws
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.5.1/deploy/static/provider/aws/deploy.yaml
+
+# SSH
+ssh -i conam-k8s-key-pair.pem ec2-user@50.17.70.158
+
+# DELETE
+
+# List EKS Clusters
+eksctl get clusters
+
+# Capture Node Group name
+eksctl get nodegroup --cluster=conam-cluster
+
+# Delete Node Group
+eksctl delete nodegroup --cluster=conam-cluster --name=conam-cluster-ng-public1

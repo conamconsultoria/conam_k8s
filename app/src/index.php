@@ -15,6 +15,12 @@ session_start();
 $logado = false;
 $session_id = '';
 
+$conn = pg_pconnect("host={$db_host} port={$db_port} dbname={$db_database} user={$db_user} password={$db_password}");
+if (!$conn) {
+    echo "An error occurred.\n";
+    exit;
+}
+
 $broker_host = getenv('KAFKA_BROKER_HOST');
 $broker_port = getenv('KAFKA_BROKER_PORT');
 

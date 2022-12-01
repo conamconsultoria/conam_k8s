@@ -11,3 +11,5 @@ kubectl apply -f k8s
 kubectl set image deployments/app-deployment conam-app=leandroconam/conam-app:$SHA
 kubectl set image deployments/logger-deployment conam-logger=leandroconam/conam-logger:$SHA
 kubectl set image deployments/portal-deployment conam-portal=leandroconam/conam-portal:$SHA
+
+echo "done"
