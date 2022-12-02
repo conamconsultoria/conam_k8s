@@ -115,7 +115,7 @@ $rk->flush(100);
 
 <div class="header">
     <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
-        <a class="pure-menu-heading" href="">Test App</a>
+        <a class="pure-menu-heading" href="">Test App v1</a>
 
         <ul class="pure-menu-list">
             <li class="pure-menu-item"><?= ($logado ? "Session ID: {$session_id}" : "Não logado");?></a></li>
